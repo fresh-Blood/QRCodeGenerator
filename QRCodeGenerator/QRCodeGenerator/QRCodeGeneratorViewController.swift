@@ -106,6 +106,10 @@ final class QRCodeGeneratorViewController: UIViewController {
                 generateQRCodeButton.removeTarget(self, action: #selector(generateQRCode), for: .touchUpInside)
                 generateQRCodeButton.setTitle(Constants.shareTitle, for: .normal)
                 generateQRCodeButton.addTarget(self, action: #selector(share), for: .touchUpInside)
+                view.endEditing(true)
+            } else {
+                setErrorGif()
+                loaderView.stopAnimating()
             }
         }
     }
@@ -134,6 +138,11 @@ final class QRCodeGeneratorViewController: UIViewController {
     private func setInitialGif() {
         let initialGif = UIImage.gifImageWithName("ghostInitial")
         gifImageView.image = initialGif
+    }
+    
+    private func setErrorGif() {
+        let errorGif = UIImage.gifImageWithName("ghostError")
+        gifImageView.image = errorGif
     }
     
     private func setSuccessQRGenerateGif() {
@@ -169,14 +178,23 @@ extension QRCodeGeneratorViewController: UITextFieldDelegate {
         if var text = textField.text {
             text.removeAll()
         }
-        qrCodeImage.image = nil
-        returnInitialGenerateQRCodeButtonBehavior()
-        setInitialGif()
+        setupInitialState()
         return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         view.endEditing(true)
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        setupInitialState()
+        return true 
+    }
+    
+    private func setupInitialState() {
+        qrCodeImage.image = nil
+        returnInitialGenerateQRCodeButtonBehavior()
+        setInitialGif()
     }
 }
 
