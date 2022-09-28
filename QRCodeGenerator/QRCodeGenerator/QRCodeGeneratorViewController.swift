@@ -92,7 +92,7 @@ final class QRCodeGeneratorViewController: UIViewController {
         guard let textToGenerateQRCode = textInput.text,
               !textToGenerateQRCode.isEmpty else { return }
         loaderView.startAnimating()
-        let data = textToGenerateQRCode.data(using: .ascii)
+        let data = textToGenerateQRCode.data(using: .utf8)
         if let qrFilter = CIFilter(name: "CIQRCodeGenerator") {
             qrFilter.setValue(data, forKey: "inputMessage")
             if let qrImage = qrFilter.outputImage {
@@ -188,7 +188,7 @@ extension QRCodeGeneratorViewController: UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         setupInitialState()
-        return true 
+        return true
     }
     
     private func setupInitialState() {
