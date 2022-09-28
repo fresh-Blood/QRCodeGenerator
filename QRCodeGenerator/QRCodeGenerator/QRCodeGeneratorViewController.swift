@@ -1,6 +1,6 @@
 //
-//  ViewController.swift
-//  QRGenerator
+//  QRCodeGeneratorViewController.swift
+//  QRCodeGenerator
 //
 //  Created by Admin on 27.09.2022.
 //
@@ -8,7 +8,6 @@
 import UIKit
 
 final class QRCodeGeneratorViewController: UIViewController {
-    
     struct Layout {
         let contentInsets: UIEdgeInsets
         static var `default`: Layout {
@@ -20,6 +19,15 @@ final class QRCodeGeneratorViewController: UIViewController {
     }
     
     private lazy var layout: Layout = .default
+    
+    private lazy var gifImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 8
+        imageView.backgroundColor = .black
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     
     private lazy var textInput: UITextField = {
         let textInput = UITextField()
@@ -61,6 +69,24 @@ final class QRCodeGeneratorViewController: UIViewController {
         return imageView
     }()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        textInput.delegate = self
+        setupUI()
+    }
+    
+    private func setupUI() {
+        view.backgroundColor = .white
+        view.addSubview(gifImageView)
+        view.addSubview(textInput)
+        view.addSubview(generateQRCodeButton)
+        qrCodeImage.addSubview(loaderView)
+        view.addSubview(qrCodeImage)
+        setupConstraints()
+        setInitialGif()
+    }
+    
+    // MARK: - GenerateQRCode
     @objc
     private func generateQRCode() {
         guard let textToGenerateQRCode = textInput.text,
@@ -76,6 +102,7 @@ final class QRCodeGeneratorViewController: UIViewController {
                 guard let cgImage = context.createCGImage(scaledQrImage, from: scaledQrImage.extent) else { return }
                 loaderView.stopAnimating()
                 qrCodeImage.image = UIImage(cgImage: cgImage)
+                setSuccessQRGenerateGif()
                 generateQRCodeButton.removeTarget(self, action: #selector(generateQRCode), for: .touchUpInside)
                 generateQRCodeButton.setTitle(Constants.shareTitle, for: .normal)
                 generateQRCodeButton.addTarget(self, action: #selector(share), for: .touchUpInside)
@@ -83,6 +110,7 @@ final class QRCodeGeneratorViewController: UIViewController {
         }
     }
     
+    // MARK: - Share
     @objc
     private func share() {
         guard let qrCodeImage = qrCodeImage.image else { return }
@@ -91,8 +119,10 @@ final class QRCodeGeneratorViewController: UIViewController {
         activityViewController.popoverPresentationController?.sourceView = view
         present(activityViewController, animated: true, completion: { [weak self] in
             self?.returnInitialGenerateQRCodeButtonBehavior()
+            self?.textInput.text?.removeAll()
+            self?.setInitialGif()
+            self?.qrCodeImage.image = nil
         })
-        textInput.text?.removeAll()
     }
     
     private func returnInitialGenerateQRCodeButtonBehavior() {
@@ -101,24 +131,24 @@ final class QRCodeGeneratorViewController: UIViewController {
         generateQRCodeButton.addTarget(self, action: #selector(generateQRCode), for: .touchUpInside)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        textInput.delegate = self
-        setupUI()
+    private func setInitialGif() {
+        let initialGif = UIImage.gifImageWithName("ghostInitial")
+        gifImageView.image = initialGif
     }
     
-    private func setupUI() {
-        view.addSubview(textInput)
-        view.addSubview(generateQRCodeButton)
-        qrCodeImage.addSubview(loaderView)
-        view.addSubview(qrCodeImage)
-        setupConstraints()
+    private func setSuccessQRGenerateGif() {
+        let successGif = UIImage.gifImageWithName("ghostDone")
+        gifImageView.image = successGif
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            textInput.topAnchor.constraint(equalTo: view.topAnchor, constant: layout.contentInsets.top),
+            gifImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: layout.contentInsets.top),
+            gifImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
+            gifImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
+            gifImageView.widthAnchor.constraint(equalToConstant: 100),
+            gifImageView.heightAnchor.constraint(equalToConstant: 100),
+            textInput.topAnchor.constraint(equalTo: gifImageView.bottomAnchor, constant: 16),
             textInput.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
             textInput.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
             generateQRCodeButton.topAnchor.constraint(equalTo: textInput.bottomAnchor, constant: 16),
@@ -135,13 +165,13 @@ final class QRCodeGeneratorViewController: UIViewController {
 }
 
 extension QRCodeGeneratorViewController: UITextFieldDelegate {
-
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         if var text = textField.text {
             text.removeAll()
         }
-        qrCodeImage.image = nil 
+        qrCodeImage.image = nil
         returnInitialGenerateQRCodeButtonBehavior()
+        setInitialGif()
         return true
     }
     
@@ -156,8 +186,9 @@ private enum Constants {
     static let shareTitle: String = "Share"
     static let generateQRCodeButtonLayerBorderWidth: CGFloat = 2
     static let cornerRadius: CGFloat = 2.0
-    static let topInset: CGFloat = 200
+    static let topInset: CGFloat = 40
     static let leftInset: CGFloat = 20
     static let rightInset: CGFloat = -20
     static let bottomInset: CGFloat = -40
 }
+

@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  QRGenerator
+//  QRCodeGenerator
 //
-//  Created by Admin on 27.09.2022.
+//  Created by Admin on 28.09.2022.
 //
 
 import UIKit
