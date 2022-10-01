@@ -68,11 +68,11 @@
 				84A35D8528E3BE0F0005B55D /* SceneDelegate.swift */,
 				84A35D8728E3BE0F0005B55D /* QRCodeGeneratorViewController.swift */,
 				84A35D9B28E3C6540005B55D /* UIImage+Extension.swift */,
+				84A35D8928E3BE0F0005B55D /* Main.storyboard */,
+				84A35D8C28E3BE130005B55D /* Assets.xcassets */,
 				84A35D9728E3C4480005B55D /* ghostInitial.gif */,
 				84A35D9928E3C4520005B55D /* ghostDone.gif */,
 				841D35E128E4E074005DF717 /* ghostError.gif */,
-				84A35D8928E3BE0F0005B55D /* Main.storyboard */,
-				84A35D8C28E3BE130005B55D /* Assets.xcassets */,
 				84A35D8E28E3BE130005B55D /* LaunchScreen.storyboard */,
 				84A35D9128E3BE130005B55D /* Info.plist */,
 			);
