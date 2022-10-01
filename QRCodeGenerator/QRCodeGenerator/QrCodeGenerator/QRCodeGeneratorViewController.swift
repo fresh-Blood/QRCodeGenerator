@@ -188,9 +188,13 @@ final class QRCodeGeneratorViewController: UIViewController {
         let imageToShare = [ qrCodeImage ]
         let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = view
-        present(activityViewController, animated: true, completion: { [weak self] in
-            self?.configureShareCompletion()
-        })
+        present(activityViewController, animated: true, completion: nil)
+        activityViewController.completionWithItemsHandler = { [weak self] activity, success, items, error in
+            let completionShouldBeCalled = error != nil || success || activity == nil
+            if completionShouldBeCalled {
+                self?.configureShareCompletion()
+            }
+        }
     }
     
     private func configureShareCompletion() {
