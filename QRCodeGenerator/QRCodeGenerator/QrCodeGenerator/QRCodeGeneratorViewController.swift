@@ -24,7 +24,7 @@ final class QRCodeGeneratorViewController: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = Constants.cornerRadius
-        imageView.backgroundColor = .black
+        imageView.backgroundColor = #colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
@@ -68,7 +68,7 @@ final class QRCodeGeneratorViewController: UIViewController {
     // MARK: SetupUI
     
     private func setupUI() {
-        view.backgroundColor = #colorLiteral(red: 0.401647687, green: 0.230414927, blue: 0.584440887, alpha: 1)
+        view.backgroundColor = #colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1)
         view.addSubview(gifImageView)
         view.addSubview(textInput)
         view.addSubview(generateQRCodeButton)
@@ -248,7 +248,7 @@ extension QRCodeGeneratorViewController: UITextFieldDelegate {
 }
 
 private enum Constants {
-    static let textInputPlaceHolder: String = "Type/Copy/Paste your text/link"
+    static let textInputPlaceHolder: String = "Type/Paste your text/link"
     static let generateQRCodeButtonTitle: String = "Generate QR"
     static let shareTitle: String = "Share"
     static let cornerRadius: CGFloat = 16.0
