@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		841D35E228E4E074005DF717 /* ghostError.gif in Resources */ = {isa = PBXBuildFile; fileRef = 841D35E128E4E074005DF717 /* ghostError.gif */; };
+		844E480328E86B190002E3AE /* VibrateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844E480228E86B190002E3AE /* VibrateManager.swift */; };
 		84A35D8428E3BE0F0005B55D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A35D8328E3BE0F0005B55D /* AppDelegate.swift */; };
 		84A35D8628E3BE0F0005B55D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A35D8528E3BE0F0005B55D /* SceneDelegate.swift */; };
 		84A35D8828E3BE0F0005B55D /* QRCodeGeneratorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A35D8728E3BE0F0005B55D /* QRCodeGeneratorViewController.swift */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		841D35E128E4E074005DF717 /* ghostError.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ghostError.gif; sourceTree = "<group>"; };
+		844E480228E86B190002E3AE /* VibrateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrateManager.swift; sourceTree = "<group>"; };
 		84A35D8028E3BE0F0005B55D /* QRCodeGenerator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QRCodeGenerator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A35D8328E3BE0F0005B55D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84A35D8528E3BE0F0005B55D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +47,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		844E480428E86B2B0002E3AE /* QrCodeGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				84A35D8728E3BE0F0005B55D /* QRCodeGeneratorViewController.swift */,
+				84A35D9B28E3C6540005B55D /* UIImage+Extension.swift */,
+				844E480228E86B190002E3AE /* VibrateManager.swift */,
+			);
+			path = QrCodeGenerator;
+			sourceTree = "<group>";
+		};
+		844E480528E86B540002E3AE /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				84A35D8C28E3BE130005B55D /* Assets.xcassets */,
+				84A35D9728E3C4480005B55D /* ghostInitial.gif */,
+				84A35D9928E3C4520005B55D /* ghostDone.gif */,
+				841D35E128E4E074005DF717 /* ghostError.gif */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		844E480628E86B600002E3AE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				84A35D8328E3BE0F0005B55D /* AppDelegate.swift */,
+				84A35D8528E3BE0F0005B55D /* SceneDelegate.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		84A35D7728E3BE0F0005B55D = {
 			isa = PBXGroup;
 			children = (
@@ -64,15 +96,10 @@
 		84A35D8228E3BE0F0005B55D /* QRCodeGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				84A35D8328E3BE0F0005B55D /* AppDelegate.swift */,
-				84A35D8528E3BE0F0005B55D /* SceneDelegate.swift */,
-				84A35D8728E3BE0F0005B55D /* QRCodeGeneratorViewController.swift */,
-				84A35D9B28E3C6540005B55D /* UIImage+Extension.swift */,
+				844E480628E86B600002E3AE /* Helpers */,
+				844E480428E86B2B0002E3AE /* QrCodeGenerator */,
 				84A35D8928E3BE0F0005B55D /* Main.storyboard */,
-				84A35D8C28E3BE130005B55D /* Assets.xcassets */,
-				84A35D9728E3C4480005B55D /* ghostInitial.gif */,
-				84A35D9928E3C4520005B55D /* ghostDone.gif */,
-				841D35E128E4E074005DF717 /* ghostError.gif */,
+				844E480528E86B540002E3AE /* Assets */,
 				84A35D8E28E3BE130005B55D /* LaunchScreen.storyboard */,
 				84A35D9128E3BE130005B55D /* Info.plist */,
 			);
@@ -154,6 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84A35D8828E3BE0F0005B55D /* QRCodeGeneratorViewController.swift in Sources */,
+				844E480328E86B190002E3AE /* VibrateManager.swift in Sources */,
 				84A35D8428E3BE0F0005B55D /* AppDelegate.swift in Sources */,
 				84A35D8628E3BE0F0005B55D /* SceneDelegate.swift in Sources */,
 				84A35D9C28E3C6540005B55D /* UIImage+Extension.swift in Sources */,
@@ -308,6 +336,7 @@
 				DEVELOPMENT_TEAM = 62XGY8QWW9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QRCodeGenerator/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = QRCodeGen;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -336,6 +365,7 @@
 				DEVELOPMENT_TEAM = 62XGY8QWW9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QRCodeGenerator/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = QRCodeGen;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

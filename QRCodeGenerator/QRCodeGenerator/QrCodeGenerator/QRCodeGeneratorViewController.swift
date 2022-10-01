@@ -109,6 +109,7 @@ final class QRCodeGeneratorViewController: UIViewController {
     
     private func handleFound(_ cgImage: CGImage) {
         loaderView.stopAnimating()
+        VibrateManager.vibrateSuccess()
         qrCodeImage.image = UIImage(cgImage: cgImage)
         setSuccessQRGenerateGif()
         setShareQRCodeButtonBehavior()
@@ -117,6 +118,7 @@ final class QRCodeGeneratorViewController: UIViewController {
     
     private func configureErrorBehavior() {
         setErrorGif()
+        VibrateManager.vibrateFailure()
         loaderView.stopAnimating()
     }
     
