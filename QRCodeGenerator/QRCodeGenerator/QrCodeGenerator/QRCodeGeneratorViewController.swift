@@ -8,6 +8,13 @@
 import UIKit
 
 final class QRCodeGeneratorViewController: UIViewController {
+    private let gradient = CAGradientLayer()
+    private lazy var buttonAnimationStarted = false
+    
+    var randomColor: UIColor {
+        .random()
+    }
+    
     struct Layout {
         let contentInsets: UIEdgeInsets
         static var `default`: Layout {
@@ -37,6 +44,7 @@ final class QRCodeGeneratorViewController: UIViewController {
         textInput.font = .preferredFont(forTextStyle: .body, compatibleWith: .none)
         textInput.borderStyle = .roundedRect
         textInput.clearButtonMode = .whileEditing
+        textInput.addTarget(self, action: #selector(showButtonReadyOrNotForAction), for: .editingChanged)
         return textInput
     }()
     
@@ -78,10 +86,17 @@ final class QRCodeGeneratorViewController: UIViewController {
     }
     
     private func setGradientLayer() {
-        let gradient = CAGradientLayer()
         gradient.frame = view.bounds
-        gradient.colors = [#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1),#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1), UIColor.systemPurple.cgColor]
+        gradient.colors = [#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor,#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor, randomColor.cgColor]
         view.layer.insertSublayer(gradient, at: 0)
+    }
+    
+    private func setLoadingGradientColors() {
+        gradient.colors = [#colorLiteral(red: 0.09455946833, green: 0.0983896032, blue: 0.1054966673, alpha: 1).cgColor,#colorLiteral(red: 0.09455946833, green: 0.0983896032, blue: 0.1054966673, alpha: 1).cgColor, randomColor.cgColor]
+    }
+    
+    private func setInitialGradientColors() {
+        gradient.colors = [#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor,#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor, randomColor.cgColor]
     }
     
     private func setupConstraints() {
@@ -104,7 +119,7 @@ final class QRCodeGeneratorViewController: UIViewController {
             textInput.topAnchor.constraint(equalTo: gifImageView.bottomAnchor, constant: 16),
             textInput.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
             textInput.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
-            textInput.heightAnchor.constraint(equalToConstant: 40)
+            textInput.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
@@ -117,6 +132,49 @@ final class QRCodeGeneratorViewController: UIViewController {
         ])
     }
     
+    private func setReadyForActionButtonLayerBorderConfiguration() {
+        generateQRCodeButton.layer.shadowColor = UIColor.white.cgColor
+        generateQRCodeButton.layer.shadowOffset = CGSize(width: 2, height: 3)
+        generateQRCodeButton.layer.shadowRadius = 7.0
+        generateQRCodeButton.layer.shadowOpacity = 1.0
+        animateButtonShadow()
+    }
+    
+    private func setInitialButtonLayerBorderConfiguration() {
+        generateQRCodeButton.layer.borderWidth = .zero
+        generateQRCodeButton.layer.borderColor = UIColor.clear.cgColor
+        generateQRCodeButton.layer.shadowColor = UIColor.clear.cgColor
+        removeButtonShadowAnimation()
+    }
+    
+    private func animateButtonShadow() {
+        let animation = CABasicAnimation(keyPath: "shadowOpacity")
+        animation.fromValue = generateQRCodeButton.layer.shadowOpacity
+        animation.toValue = 0.3
+        animation.duration = 1.0
+        animation.repeatCount = .infinity
+        animation.autoreverses = true
+        generateQRCodeButton.layer.add(animation, forKey: animation.keyPath)
+        generateQRCodeButton.layer.shadowOpacity = 0.0
+    }
+    
+    private func removeButtonShadowAnimation() {
+        generateQRCodeButton.layer.removeAllAnimations()
+    }
+    
+    @objc
+    private func showButtonReadyOrNotForAction() {
+        guard let inputText = textInput.text else { return }
+        if inputText.isEmpty {
+            buttonAnimationStarted = false
+            setInitialButtonLayerBorderConfiguration()
+        } else {
+            guard !buttonAnimationStarted else { return }
+            setReadyForActionButtonLayerBorderConfiguration()
+            buttonAnimationStarted = true
+        }
+    }
+    
     // MARK: - GenerateQRCode
     @objc
     private func generateQRCode() {
@@ -124,8 +182,12 @@ final class QRCodeGeneratorViewController: UIViewController {
               !textToGenerateQRCode.isEmpty else { return }
         view.endEditing(true)
         animateButton()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { [weak self] in
+        setLoadingGif()
+        setLoadingGradientColors()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.6, execute: { [weak self] in
             self?.generate(with: textToGenerateQRCode)
+            self?.setInitialGradientColors()
         })
     }
     
@@ -153,7 +215,7 @@ final class QRCodeGeneratorViewController: UIViewController {
                        initialSpringVelocity: 0.5,
                        options: .curveEaseIn,
                        animations: {
-            self.generateQRCodeButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            self.generateQRCodeButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         },
                        completion: { _ in
             UIView.animate(withDuration: 0.2,
@@ -193,6 +255,8 @@ final class QRCodeGeneratorViewController: UIViewController {
             let completionShouldBeCalled = error != nil || success || activity == nil
             if completionShouldBeCalled {
                 self?.configureShareCompletion()
+                self?.setInitialButtonLayerBorderConfiguration()
+                self?.buttonAnimationStarted = false
             }
         }
     }
@@ -219,6 +283,11 @@ final class QRCodeGeneratorViewController: UIViewController {
     private func setInitialGif() {
         let initialGif = UIImage.gifImageWithName("ghostInitial")
         gifImageView.image = initialGif
+    }
+    
+    private func setLoadingGif() {
+        let loadingGif = UIImage.gifImageWithName("loading")
+        gifImageView.image = loadingGif
     }
     
     private func setErrorGif() {
