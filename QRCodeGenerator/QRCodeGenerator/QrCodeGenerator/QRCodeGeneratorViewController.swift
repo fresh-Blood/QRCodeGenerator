@@ -151,7 +151,7 @@ final class QRCodeGeneratorViewController: UIViewController {
         let animation = CABasicAnimation(keyPath: "shadowOpacity")
         animation.fromValue = generateQRCodeButton.layer.shadowOpacity
         animation.toValue = 0.3
-        animation.duration = 1.0
+        animation.duration = 1.5
         animation.repeatCount = .infinity
         animation.autoreverses = true
         generateQRCodeButton.layer.add(animation, forKey: animation.keyPath)
@@ -181,6 +181,7 @@ final class QRCodeGeneratorViewController: UIViewController {
         guard let textToGenerateQRCode = textInput.text,
               !textToGenerateQRCode.isEmpty else { return }
         view.endEditing(true)
+        disableUserInteraction()
         animateButton()
         setLoadingGif()
         setLoadingGradientColors()
@@ -203,6 +204,7 @@ final class QRCodeGeneratorViewController: UIViewController {
                 handleFound(cgImage)
             } else {
                 configureErrorBehavior()
+                enableUserInteraction()
             }
         }
     }
@@ -233,12 +235,23 @@ final class QRCodeGeneratorViewController: UIViewController {
         VibrateManager.vibrateSuccess()
         gifImageView.contentMode = .scaleAspectFit
         gifImageView.image = UIImage(cgImage: cgImage)
+        enableUserInteraction()
         setShareQRCodeButtonBehavior()
     }
     
     private func configureErrorBehavior() {
         setErrorGif()
         VibrateManager.vibrateFailure()
+    }
+    
+    private func enableUserInteraction() {
+        textInput.isUserInteractionEnabled = true
+        generateQRCodeButton.isUserInteractionEnabled = true
+    }
+    
+    private func disableUserInteraction() {
+        textInput.isUserInteractionEnabled = false
+        generateQRCodeButton.isUserInteractionEnabled = false
     }
     
     // MARK: - Share
