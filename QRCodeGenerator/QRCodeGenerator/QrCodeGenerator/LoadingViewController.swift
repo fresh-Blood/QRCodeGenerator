@@ -13,25 +13,11 @@ final class LoadingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLoadingImageView()
-        gifImageView.alpha = .zero
+        setupUI()
+        presentQrCodeGenViewController()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.3,
-                       delay: .zero,
-                       options: .curveEaseInOut,
-                       animations: {
-            self.gifImageView.alpha = 1.0
-        }, completion: { [weak self] finished in
-            if finished {
-                self?.presentQrCodeGenViewController()
-            }
-        })
-    }
-    
-    private func setupLoadingImageView() {
+    private func setupUI() {
         let loadingGif = UIImage.gifImageWithName("ghostLoading")
         gifImageView.image = loadingGif
     }
@@ -40,7 +26,7 @@ final class LoadingViewController: UIViewController {
         let qrCodeGenVC = QRCodeGeneratorViewController()
         qrCodeGenVC.modalTransitionStyle = .crossDissolve
         qrCodeGenVC.modalPresentationStyle = .fullScreen
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.4, execute: { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: { [weak self] in
             self?.present(qrCodeGenVC, animated: true, completion: nil)
         })
     }

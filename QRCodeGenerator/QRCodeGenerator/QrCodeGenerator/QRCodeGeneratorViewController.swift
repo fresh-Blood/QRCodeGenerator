@@ -74,6 +74,14 @@ final class QRCodeGeneratorViewController: UIViewController {
         view.addSubview(generateQRCodeButton)
         setupConstraints()
         setInitialGif()
+        setGradientLayer()
+    }
+    
+    private func setGradientLayer() {
+        let gradient = CAGradientLayer()
+        gradient.frame = view.bounds
+        gradient.colors = [#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1),#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1), UIColor.systemPurple.cgColor]
+        view.layer.insertSublayer(gradient, at: 0)
     }
     
     private func setupConstraints() {
