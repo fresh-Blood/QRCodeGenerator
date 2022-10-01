@@ -13,11 +13,11 @@ final class LoadingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        setLoadingGif()
         presentQrCodeGenViewController()
     }
     
-    private func setupUI() {
+    private func setLoadingGif() {
         let loadingGif = UIImage.gifImageWithName("ghostLoading")
         gifImageView.image = loadingGif
     }
