@@ -9,9 +9,7 @@ import Foundation
 import UIKit
 
 struct VibrateManager {
-    var generator: UINotificationFeedbackGenerator {
-        UINotificationFeedbackGenerator()
-    }
+    static let generator = UINotificationFeedbackGenerator()
     
     static func vibrateSuccess() {
         generator.prepare()
