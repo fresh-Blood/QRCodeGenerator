@@ -20,4 +20,10 @@ struct VibrateManager {
         generator.prepare()
         generator.notificationOccurred(.error)
     }
+    
+    static func vibrateSoft() {
+        let generator = UIImpactFeedbackGenerator(style: .soft)
+        generator.prepare()
+        generator.impactOccurred()
+    }
 }
