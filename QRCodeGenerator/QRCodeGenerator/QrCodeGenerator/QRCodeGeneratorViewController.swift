@@ -44,7 +44,7 @@ final class QRCodeGeneratorViewController: UIViewController {
         textInput.font = .preferredFont(forTextStyle: .body, compatibleWith: .none)
         textInput.borderStyle = .roundedRect
         textInput.clearButtonMode = .whileEditing
-        textInput.addTarget(self, action: #selector(showButtonReadyOrNotForAction), for: .editingChanged)
+        textInput.addTarget(self, action: #selector(showButtonReadyForActionIfNeeded), for: .editingChanged)
         return textInput
     }()
     
@@ -88,7 +88,7 @@ final class QRCodeGeneratorViewController: UIViewController {
     private func setGradientLayer() {
         gradient.frame = view.bounds
         gradient.colors = [#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor,#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor, randomColor.cgColor]
-        view.layer.insertSublayer(gradient, at: 0)
+        view.layer.insertSublayer(gradient, at: .zero)
     }
     
     private func setLoadingGradientColors() {
@@ -110,29 +110,53 @@ final class QRCodeGeneratorViewController: UIViewController {
             gifImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: layout.contentInsets.top),
             gifImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
             gifImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
-            gifImageView.heightAnchor.constraint(equalToConstant: 300)
+            gifImageView.heightAnchor.constraint(equalToConstant: Constants.gifImageViewHeightAnchorValue)
         ])
     }
     
     private func setTextInputConstraints() {
         NSLayoutConstraint.activate([
-            textInput.topAnchor.constraint(equalTo: gifImageView.bottomAnchor, constant: 16),
+            textInput.topAnchor.constraint(equalTo: gifImageView.bottomAnchor, constant: Constants.textInputTopAnchorValue),
             textInput.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
             textInput.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
-            textInput.heightAnchor.constraint(equalToConstant: 50)
+            textInput.heightAnchor.constraint(equalToConstant: Constants.textInputHeightAnchorValue)
         ])
     }
     
     private func setGenerateQRCodeButtonConstraints() {
         NSLayoutConstraint.activate([
-            generateQRCodeButton.topAnchor.constraint(equalTo: textInput.bottomAnchor, constant: 50),
+            generateQRCodeButton.topAnchor.constraint(equalTo: textInput.bottomAnchor, constant: Constants.generateQRCodeButtonTopAnchorValue),
             generateQRCodeButton.widthAnchor.constraint(equalToConstant: Constants.generateQRCodeButtonWidth),
             generateQRCodeButton.heightAnchor.constraint(equalToConstant: Constants.generateQRCodeButtonHeight),
             generateQRCodeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
-    private func setReadyForActionButtonLayerBorderConfiguration() {
+    @objc
+    private func showButtonReadyForActionIfNeeded() {
+        guard let inputText = textInput.text else { return }
+        if inputText.isEmpty {
+            buttonAnimationStarted = false
+            setInitialButtonLayerConfiguration()
+        } else {
+            guard !buttonAnimationStarted else { return }
+            setReadyForActionButtonLayerConfiguration()
+            buttonAnimationStarted = true
+        }
+    }
+    
+    private func setInitialButtonLayerConfiguration() {
+        generateQRCodeButton.layer.borderWidth = .zero
+        generateQRCodeButton.layer.borderColor = UIColor.clear.cgColor
+        generateQRCodeButton.layer.shadowColor = UIColor.clear.cgColor
+        removeButtonShadowAnimation()
+    }
+    
+    private func removeButtonShadowAnimation() {
+        generateQRCodeButton.layer.removeAllAnimations()
+    }
+    
+    private func setReadyForActionButtonLayerConfiguration() {
         generateQRCodeButton.layer.shadowColor = UIColor.white.cgColor
         generateQRCodeButton.layer.shadowOffset = CGSize(width: 2, height: 3)
         generateQRCodeButton.layer.shadowRadius = 7.0
@@ -140,39 +164,15 @@ final class QRCodeGeneratorViewController: UIViewController {
         animateButtonShadow()
     }
     
-    private func setInitialButtonLayerBorderConfiguration() {
-        generateQRCodeButton.layer.borderWidth = .zero
-        generateQRCodeButton.layer.borderColor = UIColor.clear.cgColor
-        generateQRCodeButton.layer.shadowColor = UIColor.clear.cgColor
-        removeButtonShadowAnimation()
-    }
-    
     private func animateButtonShadow() {
         let animation = CABasicAnimation(keyPath: "shadowOpacity")
         animation.fromValue = generateQRCodeButton.layer.shadowOpacity
         animation.toValue = 0.3
-        animation.duration = 1.5
+        animation.duration = Constants.shadowAnimationDuration
         animation.repeatCount = .infinity
         animation.autoreverses = true
         generateQRCodeButton.layer.add(animation, forKey: animation.keyPath)
-        generateQRCodeButton.layer.shadowOpacity = 0.0
-    }
-    
-    private func removeButtonShadowAnimation() {
-        generateQRCodeButton.layer.removeAllAnimations()
-    }
-    
-    @objc
-    private func showButtonReadyOrNotForAction() {
-        guard let inputText = textInput.text else { return }
-        if inputText.isEmpty {
-            buttonAnimationStarted = false
-            setInitialButtonLayerBorderConfiguration()
-        } else {
-            guard !buttonAnimationStarted else { return }
-            setReadyForActionButtonLayerBorderConfiguration()
-            buttonAnimationStarted = true
-        }
+        generateQRCodeButton.layer.shadowOpacity = .zero
     }
     
     // MARK: - GenerateQRCode
@@ -186,10 +186,15 @@ final class QRCodeGeneratorViewController: UIViewController {
         setLoadingGif()
         setLoadingGradientColors()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.6, execute: { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.loadingAnimationDuration, execute: { [weak self] in
             self?.generate(with: textToGenerateQRCode)
             self?.setInitialGradientColors()
         })
+    }
+    
+    private func setLoadingGif() {
+        let loadingGif = UIImage.gifImageWithName("loading")
+        gifImageView.image = loadingGif
     }
     
     private func generate(with text: String) {
@@ -201,7 +206,7 @@ final class QRCodeGeneratorViewController: UIViewController {
                 let scaledQrImage = qrImage.transformed(by: transform)
                 let context = CIContext()
                 guard let cgImage = context.createCGImage(scaledQrImage, from: scaledQrImage.extent) else { return }
-                handleFound(cgImage)
+                enrichGifImageViewWith(cgImage)
             } else {
                 configureErrorBehavior()
                 enableUserInteraction()
@@ -219,19 +224,19 @@ final class QRCodeGeneratorViewController: UIViewController {
                        animations: {
             self.generateQRCodeButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         },
-                       completion: { _ in
+                       completion: { [weak self] _ in
             UIView.animate(withDuration: 0.2,
                            delay: .zero,
                            usingSpringWithDamping: 0.1,
                            initialSpringVelocity: 0.5,
                            options: .curveEaseOut,
                            animations: {
-                self.generateQRCodeButton.transform = CGAffineTransform.identity
+                self?.generateQRCodeButton.transform = CGAffineTransform.identity
             })
         })
     }
     
-    private func handleFound(_ cgImage: CGImage) {
+    private func enrichGifImageViewWith(_ cgImage: CGImage) {
         VibrateManager.vibrateSuccess()
         gifImageView.contentMode = .scaleAspectFit
         gifImageView.image = UIImage(cgImage: cgImage)
@@ -239,9 +244,20 @@ final class QRCodeGeneratorViewController: UIViewController {
         setShareQRCodeButtonBehavior()
     }
     
+    private func setShareQRCodeButtonBehavior() {
+        generateQRCodeButton.removeTarget(self, action: #selector(generateQRCode), for: .touchUpInside)
+        generateQRCodeButton.setTitle(Constants.shareTitle, for: .normal)
+        generateQRCodeButton.addTarget(self, action: #selector(share), for: .touchUpInside)
+    }
+    
     private func configureErrorBehavior() {
         setErrorGif()
         VibrateManager.vibrateFailure()
+    }
+    
+    private func setErrorGif() {
+        let errorGif = UIImage.gifImageWithName("ghostError")
+        gifImageView.image = errorGif
     }
     
     private func enableUserInteraction() {
@@ -268,7 +284,7 @@ final class QRCodeGeneratorViewController: UIViewController {
             let completionShouldBeCalled = error != nil || success || activity == nil
             if completionShouldBeCalled {
                 self?.configureShareCompletion()
-                self?.setInitialButtonLayerBorderConfiguration()
+                self?.setInitialButtonLayerConfiguration()
                 self?.buttonAnimationStarted = false
             }
         }
@@ -281,12 +297,6 @@ final class QRCodeGeneratorViewController: UIViewController {
         setInitialGif()
     }
     
-    private func setShareQRCodeButtonBehavior() {
-        generateQRCodeButton.removeTarget(self, action: #selector(generateQRCode), for: .touchUpInside)
-        generateQRCodeButton.setTitle(Constants.shareTitle, for: .normal)
-        generateQRCodeButton.addTarget(self, action: #selector(share), for: .touchUpInside)
-    }
-    
     private func returnInitialGenerateQRCodeButtonBehavior() {
         generateQRCodeButton.removeTarget(self, action: #selector(share), for: .touchUpInside)
         generateQRCodeButton.setTitle(Constants.generateQRCodeButtonTitle, for: .normal)
@@ -296,16 +306,6 @@ final class QRCodeGeneratorViewController: UIViewController {
     private func setInitialGif() {
         let initialGif = UIImage.gifImageWithName("ghostInitial")
         gifImageView.image = initialGif
-    }
-    
-    private func setLoadingGif() {
-        let loadingGif = UIImage.gifImageWithName("loading")
-        gifImageView.image = loadingGif
-    }
-    
-    private func setErrorGif() {
-        let errorGif = UIImage.gifImageWithName("ghostError")
-        gifImageView.image = errorGif
     }
     
     private func setSuccessQRGenerateGif() {
@@ -339,19 +339,5 @@ extension QRCodeGeneratorViewController: UITextFieldDelegate {
         returnInitialGenerateQRCodeButtonBehavior()
         setInitialGif()
     }
-}
-
-private enum Constants {
-    static let textInputPlaceHolder: String = "Type/Paste your text/link"
-    static let generateQRCodeButtonTitle: String = "Generate QR"
-    static let shareTitle: String = "Share"
-    static let cornerRadius: CGFloat = 16.0
-    static let topInset: CGFloat = 20 + (UIApplication.shared.keyWindow?.safeAreaInsets.top ?? .zero)
-    static let leftInset: CGFloat = 20
-    static let rightInset: CGFloat = -20
-    static let bottomInset: CGFloat = -40
-    static let generateQRCodeButtonWidth: CGFloat = 150
-    static let generateQRCodeButtonHeight: CGFloat = 70
-    static let padding: UIEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
 }
 
