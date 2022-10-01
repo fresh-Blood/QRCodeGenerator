@@ -16,14 +16,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nSX-qC-Qb0">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nSX-qC-Qb0">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="906"/>
                                 <color key="backgroundColor" red="0.40164768699999998" green="0.23041492699999999" blue="0.58444088699999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lne-jK-SxQ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="nSX-qC-Qb0" firstAttribute="centerX" secondItem="lne-jK-SxQ" secondAttribute="centerX" id="6ag-cr-XO4"/>
+                            <constraint firstItem="nSX-qC-Qb0" firstAttribute="leading" secondItem="lne-jK-SxQ" secondAttribute="leading" id="7qx-eZ-bmZ"/>
+                            <constraint firstItem="nSX-qC-Qb0" firstAttribute="top" secondItem="ep2-zQ-m2u" secondAttribute="topMargin" constant="-44" id="Rww-cL-lET"/>
+                            <constraint firstItem="nSX-qC-Qb0" firstAttribute="centerY" secondItem="lne-jK-SxQ" secondAttribute="centerY" id="cdT-XR-sLx"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="gifImageView" destination="nSX-qC-Qb0" id="SZT-dD-LB2"/>

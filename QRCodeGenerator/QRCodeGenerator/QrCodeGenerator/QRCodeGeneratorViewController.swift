@@ -23,7 +23,7 @@ final class QRCodeGeneratorViewController: UIViewController {
     private lazy var gifImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = 16
+        imageView.layer.cornerRadius = Constants.cornerRadius
         imageView.backgroundColor = .black
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -35,15 +35,14 @@ final class QRCodeGeneratorViewController: UIViewController {
         textInput.translatesAutoresizingMaskIntoConstraints = false
         textInput.placeholder = Constants.textInputPlaceHolder
         textInput.font = .preferredFont(forTextStyle: .body, compatibleWith: .none)
-        textInput.backgroundColor = .black
+        textInput.borderStyle = .roundedRect
         textInput.clearButtonMode = .whileEditing
-        textInput.keyboardAppearance = .dark
         return textInput
     }()
     
     private lazy var generateQRCodeButton: UIButton = {
         let button = UIButton()
-        button.layer.cornerRadius = 16
+        button.layer.cornerRadius = Constants.cornerRadius
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(Constants.generateQRCodeButtonTitle, for: .normal)
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline, compatibleWith: .current)
@@ -52,6 +51,8 @@ final class QRCodeGeneratorViewController: UIViewController {
         button.addTarget(self, action: #selector(generateQRCode), for: .touchUpInside)
         return button
     }()
+    
+    // MARK: - LifeCycle
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -64,18 +65,48 @@ final class QRCodeGeneratorViewController: UIViewController {
         setupUI()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        textInput.layer.cornerRadius = 16
-    }
+    // MARK: SetupUI
     
     private func setupUI() {
-        view.backgroundColor = .systemPurple
+        view.backgroundColor = #colorLiteral(red: 0.401647687, green: 0.230414927, blue: 0.584440887, alpha: 1)
         view.addSubview(gifImageView)
         view.addSubview(textInput)
         view.addSubview(generateQRCodeButton)
         setupConstraints()
         setInitialGif()
+    }
+    
+    private func setupConstraints() {
+        setGifImageViewConstraints()
+        setTextInputConstraints()
+        setGenerateQRCodeButtonConstraints()
+    }
+    
+    private func setGifImageViewConstraints() {
+        NSLayoutConstraint.activate([
+            gifImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: layout.contentInsets.top),
+            gifImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
+            gifImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
+            gifImageView.heightAnchor.constraint(equalToConstant: 300)
+        ])
+    }
+    
+    private func setTextInputConstraints() {
+        NSLayoutConstraint.activate([
+            textInput.topAnchor.constraint(equalTo: gifImageView.bottomAnchor, constant: 16),
+            textInput.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
+            textInput.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
+            textInput.heightAnchor.constraint(equalToConstant: 40)
+        ])
+    }
+    
+    private func setGenerateQRCodeButtonConstraints() {
+        NSLayoutConstraint.activate([
+            generateQRCodeButton.topAnchor.constraint(equalTo: textInput.bottomAnchor, constant: 50),
+            generateQRCodeButton.widthAnchor.constraint(equalToConstant: Constants.generateQRCodeButtonWidth),
+            generateQRCodeButton.heightAnchor.constraint(equalToConstant: Constants.generateQRCodeButtonHeight),
+            generateQRCodeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
     
     // MARK: - GenerateQRCode
@@ -187,39 +218,6 @@ final class QRCodeGeneratorViewController: UIViewController {
         let successGif = UIImage.gifImageWithName("ghostSuccess")
         gifImageView.image = successGif
     }
-    
-    private func setupConstraints() {
-        setGifImageViewConstraints()
-        setTextInputConstraints()
-        setGenerateQRCodeButtonConstraints()
-    }
-    
-    private func setGifImageViewConstraints() {
-        NSLayoutConstraint.activate([
-            gifImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: layout.contentInsets.top),
-            gifImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
-            gifImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
-            gifImageView.heightAnchor.constraint(equalToConstant: 300)
-        ])
-    }
-    
-    private func setTextInputConstraints() {
-        NSLayoutConstraint.activate([
-            textInput.topAnchor.constraint(equalTo: gifImageView.bottomAnchor, constant: 16),
-            textInput.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
-            textInput.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
-            textInput.heightAnchor.constraint(equalToConstant: 40)
-        ])
-    }
-    
-    private func setGenerateQRCodeButtonConstraints() {
-        NSLayoutConstraint.activate([
-            generateQRCodeButton.topAnchor.constraint(equalTo: textInput.bottomAnchor, constant: 50),
-            generateQRCodeButton.widthAnchor.constraint(equalToConstant: Constants.generateQRCodeButtonWidth),
-            generateQRCodeButton.heightAnchor.constraint(equalToConstant: Constants.generateQRCodeButtonHeight),
-            generateQRCodeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -253,8 +251,8 @@ private enum Constants {
     static let textInputPlaceHolder: String = "Type/Copy/Paste your text/link"
     static let generateQRCodeButtonTitle: String = "Generate QR"
     static let shareTitle: String = "Share"
-    static let cornerRadius: CGFloat = 2.0
-    static let topInset: CGFloat = 80
+    static let cornerRadius: CGFloat = 16.0
+    static let topInset: CGFloat = 20 + (UIApplication.shared.keyWindow?.safeAreaInsets.top ?? .zero)
     static let leftInset: CGFloat = 20
     static let rightInset: CGFloat = -20
     static let bottomInset: CGFloat = -40
