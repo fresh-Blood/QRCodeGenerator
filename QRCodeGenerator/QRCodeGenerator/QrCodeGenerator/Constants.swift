@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 enum Constants {
-    static let textInputPlaceHolder: String = "Type/Paste your text/link"
-    static let generateQRCodeButtonTitle: String = "Generate QR"
-    static let shareTitle: String = "Share"
+    static let textInputPlaceHolder: String = "Введите или вставьте ваш текст"
+    static let generateQRCodeButtonTitle: String = "Создать QR"
+    static let shareTitle: String = "Поделиться"
     static let cornerRadius: CGFloat = 16.0
     static let textInputTopAnchorValue: CGFloat = 16
     static let topInset: CGFloat = 20 + (UIApplication.shared.keyWindow?.safeAreaInsets.top ?? .zero)
