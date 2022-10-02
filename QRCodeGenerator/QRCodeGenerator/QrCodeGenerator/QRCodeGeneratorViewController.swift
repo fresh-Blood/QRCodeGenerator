@@ -87,21 +87,21 @@ final class QRCodeGeneratorViewController: UIViewController {
     
     private func setGradientLayer() {
         gradient.frame = view.bounds
-        gradient.colors = [#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor,#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor, randomColor.cgColor]
+        gradient.colors = [#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor,#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor,#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor, randomColor.cgColor]
         view.layer.insertSublayer(gradient, at: .zero)
     }
     
     private func setLoadingGradientColors() {
-        gradient.colors = [#colorLiteral(red: 0.09455946833, green: 0.0983896032, blue: 0.1054966673, alpha: 1).cgColor,#colorLiteral(red: 0.09455946833, green: 0.0983896032, blue: 0.1054966673, alpha: 1).cgColor, randomColor.cgColor]
+        gradient.colors = [#colorLiteral(red: 0.09455946833, green: 0.0983896032, blue: 0.1054966673, alpha: 1).cgColor,#colorLiteral(red: 0.09455946833, green: 0.0983896032, blue: 0.1054966673, alpha: 1).cgColor,#colorLiteral(red: 0.09455946833, green: 0.0983896032, blue: 0.1054966673, alpha: 1).cgColor, randomColor.cgColor]
     }
     
     private func setSuccessGradientColors() {
-        gradient.colors = [#colorLiteral(red: 0.1019478217, green: 0.1019691005, blue: 0.1019431427, alpha: 1).cgColor,#colorLiteral(red: 0.1019478217, green: 0.1019691005, blue: 0.1019431427, alpha: 1).cgColor, randomColor.cgColor]
+        gradient.colors = [#colorLiteral(red: 0.1019478217, green: 0.1019691005, blue: 0.1019431427, alpha: 1).cgColor,#colorLiteral(red: 0.1019478217, green: 0.1019691005, blue: 0.1019431427, alpha: 1).cgColor,#colorLiteral(red: 0.1019478217, green: 0.1019691005, blue: 0.1019431427, alpha: 1).cgColor, randomColor.cgColor]
         gifImageView.backgroundColor = #colorLiteral(red: 0.1019478217, green: 0.1019691005, blue: 0.1019431427, alpha: 1)
     }
     
     private func setInitialGradientColors() {
-        gradient.colors = [#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor,#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor, randomColor.cgColor]
+        gradient.colors = [#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor,#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor,#colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1).cgColor, randomColor.cgColor]
         gifImageView.backgroundColor = #colorLiteral(red: 0.1137115434, green: 0.1137344316, blue: 0.1137065217, alpha: 1)
     }
     
@@ -112,11 +112,13 @@ final class QRCodeGeneratorViewController: UIViewController {
     }
     
     private func setGifImageViewConstraints() {
+        let gifImageViewHeightAnchorValue = view.frame.width - layout.contentInsets.left*2
+        
         NSLayoutConstraint.activate([
-            gifImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: layout.contentInsets.top),
+            gifImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: layout.contentInsets.top + view.safeAreaInsets.top),
             gifImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
             gifImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
-            gifImageView.heightAnchor.constraint(equalToConstant: Constants.gifImageViewHeightAnchorValue)
+            gifImageView.heightAnchor.constraint(equalToConstant: gifImageViewHeightAnchorValue)
         ])
     }
     

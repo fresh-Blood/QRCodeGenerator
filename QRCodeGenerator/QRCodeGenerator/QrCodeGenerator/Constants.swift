@@ -14,7 +14,7 @@ enum Constants {
     static let shareTitle: String = "Поделиться"
     static let cornerRadius: CGFloat = 16.0
     static let textInputTopAnchorValue: CGFloat = 16
-    static let topInset: CGFloat = 20 + (UIApplication.shared.keyWindow?.safeAreaInsets.top ?? .zero)
+    static let topInset: CGFloat = 60
     static let leftInset: CGFloat = 20
     static let rightInset: CGFloat = -20
     static let bottomInset: CGFloat = -40
@@ -25,5 +25,4 @@ enum Constants {
     static let shadowAnimationDuration: CGFloat = 1.5
     static let generateQRCodeButtonTopAnchorValue: CGFloat = 50.0
     static let textInputHeightAnchorValue: CGFloat = 50.0
-    static let gifImageViewHeightAnchorValue: CGFloat = 300.0
 }
