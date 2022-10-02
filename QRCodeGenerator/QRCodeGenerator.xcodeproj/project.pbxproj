@@ -364,7 +364,7 @@
 				DEVELOPMENT_TEAM = 62XGY8QWW9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QRCodeGenerator/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = QRCodeGen;
+				INFOPLIST_KEY_CFBundleDisplayName = "QR Generator";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -394,7 +394,7 @@
 				DEVELOPMENT_TEAM = 62XGY8QWW9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QRCodeGenerator/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = QRCodeGen;
+				INFOPLIST_KEY_CFBundleDisplayName = "QR Generator";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
