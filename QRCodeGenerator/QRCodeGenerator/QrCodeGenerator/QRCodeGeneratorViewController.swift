@@ -294,10 +294,8 @@ final class QRCodeGeneratorViewController: UIViewController {
             self.setSuccessGradientColors()
             let imageToShare = [ qrCodeImage ]
             let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
-            
-            activityViewController.popoverPresentationController?.sourceRect = self.view.frame
-            
             activityViewController.popoverPresentationController?.sourceView = self.view
+            activityViewController.prepairForIPad(withVCView: self.view, withVC: self)
             self.present(activityViewController, animated: true, completion: nil)
             activityViewController.completionWithItemsHandler = { [weak self] activity, success, items, error in
                 let completionShouldBeCalled = error != nil || success || activity == nil
