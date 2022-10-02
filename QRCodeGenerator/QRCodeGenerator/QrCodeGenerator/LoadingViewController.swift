@@ -13,6 +13,7 @@ final class LoadingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = #colorLiteral(red: 0.1999788582, green: 0.2000134587, blue: 0.1999712884, alpha: 1)
         setLoadingGif()
         presentQrCodeGenViewController()
     }
