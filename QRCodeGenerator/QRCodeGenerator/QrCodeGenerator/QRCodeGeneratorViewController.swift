@@ -113,6 +113,25 @@ final class QRCodeGeneratorViewController: UIViewController {
     }
     
     private func setGifImageViewConstraints() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            setIpadConstants()
+        } else if UIDevice.current.userInterfaceIdiom == .phone {
+            setIphoneConstants()
+        }
+    }
+    
+    private func setIphoneConstants() {
+        let gifImageViewSideValue = view.frame.width - layout.contentInsets.left*2
+        
+        NSLayoutConstraint.activate([
+            gifImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: layout.contentInsets.top + view.safeAreaInsets.top),
+            gifImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: layout.contentInsets.left),
+            gifImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: layout.contentInsets.right),
+            gifImageView.heightAnchor.constraint(equalToConstant: gifImageViewSideValue),
+        ])
+    }
+    
+    private func setIpadConstants() {
         let gifImageViewSideValue = (view.frame.width - layout.contentInsets.left*2)/2
         
         NSLayoutConstraint.activate([
